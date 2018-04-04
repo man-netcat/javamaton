@@ -20,11 +20,11 @@ public class DFA {
     }
 
     public void addState() {
-        states.add(states.size() + 1);
+        states.add(states.size());
     }
 
     public void addStates(int amount) {
-        for (int i = 0; i <amount; i++) {
+        for (int i = 0; i < amount; i++) {
             addState();
         }
     }
@@ -78,9 +78,8 @@ public class DFA {
     public boolean automaton(String word) {
         int curstate = start;
 
-        for (int i = 0; i < word.length() - 1; i++) {
+        for (int i = 0; i < word.length(); i++) {
             char symbol = word.charAt(i);
-            System.out.println(symbol);
             curstate = transition(curstate, symbol);
         }
 
@@ -102,7 +101,7 @@ public class DFA {
         machine.addFunction(1, 'a', 2);
         machine.addFunction(2, 'a', 2);
         machine.addFunction(3, 'a', 4);
-        machine.addFunction(4, 'a', 5);
+        machine.addFunction(4, 'a', 4);
         machine.addFunction(1, 'b', 1);
         machine.addFunction(2, 'b', 3);
         machine.addFunction(3, 'b', 1);
