@@ -4,15 +4,15 @@ import java.util.*;
 
 public class DFA {
     // Finite set of states
-    private Set <Integer> states = new HashSet <> ();
+    private Set <Integer> states = new HashSet<>();
     // Input alphabet
-    private Set <Character> alphabet = new HashSet <> ();
+    private Set <Character> alphabet = new HashSet<>();
     // Set of transition functions
-    private Map <Key, Integer> functions = new HashMap <> ();
+    private Map <Key, Integer> functions = new HashMap<>();
     // Start state
     private int start;
     // Set of final states
-    private Set <Integer> finalStates = new HashSet <> ();
+    private Set <Integer> finalStates = new HashSet<>();
 
     public DFA(int start) {
         addStates(start);
