@@ -5,37 +5,32 @@ import java.io.*;
 
 public class DFA {
     // Finite set of states
-    private Set <Integer> states = new HashSet<>();
+    private Set <Character> states = new HashSet<>();
     // Input alphabet
     private Set <Character> alphabet = new HashSet<>();
     // Set of transition functions
-    private Map <Key, Integer> functions = new HashMap<>();
+    private Map <Key, Character> functions = new HashMap<>();
     // Start state
-    private int start;
+    private char start;
     // Set of final states
-    private Set <Integer> finalStates = new HashSet<>();
+    private Set <Character> finalStates = new HashSet<>();
 
-    public DFA(int start) {
-        addStates(start);
-        this.start = start;
+    public void addState(char state) {
+        states.add(state);
     }
 
-    public void addState() {
-        states.add(states.size());
-    }
-
-    public void addStates(int amount) {
-        for (int i = 0; i < amount; i++) {
-            addState();
+    public void addStates(char amount) {
+        for (char state: states) {
+            addState(state);
         }
     }
 
-    public void addFinalState(int state) {
+    public void addFinalState(char state) {
         finalStates.add(state);
     }
 
-    public void addFinalStates(int[] states) {
-        for (int state: states) {
+    public void addFinalStates(char[] states) {
+        for (char state: states) {
             addFinalState(state);
         }
     }
@@ -50,34 +45,26 @@ public class DFA {
         }
     }
 
-    public void addFunction(int state, char symbol, int newstate) {
-        if (!states.contains(state)) {
-            System.out.println("State not present in set of states");
-            System.exit(1);
-        }
-        if (!alphabet.contains(symbol)) {
-            System.out.println("Symbol not present in alphabet");
-            System.exit(1);
-        }
+    public void addFunction(char state, char symbol, char newstate) {
         Key key = new Key(state, symbol);
         functions.put(key, newstate);
     }
 
-    public int transition(int state, char symbol) {
+    public char transition(char state, char symbol) {
         Key key = new Key(state, symbol);
         return functions.get(key);
     }
 
-    public void setStart(int start) {
+    public void setStart(char start) {
         this.start = start;
     }
 
-    public int getStart() {
+    public char getStart() {
         return start;
     }
 
     public boolean automaton(String word) {
-        int curstate = start;
+        char curstate = start;
 
         for (int i = 0; i < word.length(); i++) {
             char symbol = word.charAt(i);
@@ -91,41 +78,34 @@ public class DFA {
         return false;
     }
 
-    void readFunctions(String filename)
-    {
-        File file = new File(filename);
-        try {
-            Scanner scanner = new Scanner(file);
-            while(scanner.hasNext()){
-                int state = scanner.next().charAt(0) - '0';
-                char symbol = scanner.next().charAt(0);
-                int newstate = scanner.next().charAt(0) - '0';
-                addFunction(state, symbol, newstate);
-            }
-        } catch(FileNotFoundException ex) {
-            ex.printStackTrace();
-        } catch(NoSuchElementException ex) {
-            ex.printStackTrace();
-        }
-    }
-
     void readData(String filename)
     {
         File file = new File(filename);
         try {
             Scanner scanner = new Scanner(file);
             String data;
-            int status = 0;
+            char status = 0;
             while(scanner.hasNext()){
-                switch (data = scanner.next()){
+                data = scanner.next();
+                switch (data){
                     case "States:": status = 1; break;
                     case "Symbols:": status = 2; break;
-                    case "FinalStates:": status = 3; break;
+                    case "Start:": status = 3; break;
+                    case "FinalStates:": status = 4; break;
+                    case "Functions:": status = 5; break;
+                    case "EndFunctions.": status = 0; break;
                     default:
                     switch (status) {
-                        case 1: addStates(data.charAt(0) - '0'); break;
+                        case 1: addStates(data.charAt(0)); break;
                         case 2: addSymbol(data.charAt(0)); break;
-                        case 3: addFinalState(data.charAt(0) - '0'); break;
+                        case 3: this.start = data.charAt(0); break;
+                        case 4: addFinalState(data.charAt(0)); break;
+                        case 5:
+                        char state = data.charAt(0);
+                        char symbol = scanner.next().charAt(0);
+                        char newstate = scanner.next().charAt(0);
+                        addFunction(state, symbol, newstate);
+                        break;
                     }
                 }
             }
@@ -137,10 +117,9 @@ public class DFA {
     }
 
     public static void main(String[] args) {
-        DFA machine = new DFA(1);
-        machine.readData("data.txt");
-        machine.readFunctions("funcs.txt");
-        System.out.println(machine.automaton("babaa"));
-        System.out.println(machine.automaton("aabbb"));
+        DFA m1 = new DFA();
+        m1.readData("data.txt");
+        System.out.println(m1.automaton("babaa"));
+        System.out.println(m1.automaton("aabbb"));
     }
 }

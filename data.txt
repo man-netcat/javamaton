@@ -1,3 +1,14 @@
-States: 4
+States: 1 2 3 4
 Symbols: a b
+Start: 1
 FinalStates: 4
+Functions:
+1 a 2
+2 a 2
+3 a 4
+4 a 4
+1 b 1
+2 b 3
+3 b 1
+4 b 4
+EndFunctions.
