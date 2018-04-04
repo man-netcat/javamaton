@@ -19,30 +19,12 @@ public class DFA {
         states.add(state);
     }
 
-    public void addStates(char[] states) {
-        for (char state: states) {
-            addState(state);
-        }
-    }
-
     public void addFinalState(char state) {
         finalStates.add(state);
     }
 
-    public void addFinalStates(char[] states) {
-        for (char state: states) {
-            addFinalState(state);
-        }
-    }
-
     public void addSymbol(char symbol) {
         alphabet.add(symbol);
-    }
-
-    public void addSymbols(char[] symbols) {
-        for (char symbol: symbols) {
-            addSymbol(symbol);
-        }
     }
 
     public void addFunction(char state, char symbol, char newstate) {
@@ -78,15 +60,14 @@ public class DFA {
         return false;
     }
 
-    void readData(String filename)
+    public void readData(String filename)
     {
         File file = new File(filename);
         try {
             Scanner scanner = new Scanner(file);
-            String data;
             char status = 0;
             while(scanner.hasNext()){
-                data = scanner.next();
+                String data = scanner.next();
                 switch (data){
                     case "States:": status = 1; break;
                     case "Symbols:": status = 2; break;
@@ -121,5 +102,10 @@ public class DFA {
         m1.readData("data.txt");
         System.out.println(m1.automaton("babaa"));
         System.out.println(m1.automaton("aabbb"));
+
+        DFA m2 = new DFA();
+        m2.readData("data2.txt");
+        System.out.println(m2.automaton("1001010"));
+        System.out.println(m2.automaton("100101"));
     }
 }
