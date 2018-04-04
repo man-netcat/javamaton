@@ -1,6 +1,7 @@
 package automata;
 
 import java.util.*;
+import java.io.*;
 
 public class DFA {
     // Finite set of states
@@ -90,22 +91,56 @@ public class DFA {
         return false;
     }
 
+    void readFunctions(String filename)
+    {
+        File file = new File(filename);
+        try {
+            Scanner scanner = new Scanner(file);
+            while(scanner.hasNext()){
+                int state = scanner.next().charAt(0) - '0';
+                char symbol = scanner.next().charAt(0);
+                int newstate = scanner.next().charAt(0) - '0';
+                addFunction(state, symbol, newstate);
+            }
+        } catch(FileNotFoundException ex) {
+            ex.printStackTrace();
+        } catch(NoSuchElementException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    void readData(String filename)
+    {
+        File file = new File(filename);
+        try {
+            Scanner scanner = new Scanner(file);
+            String data;
+            int status = 0;
+            while(scanner.hasNext()){
+                switch (data = scanner.next()){
+                    case "States:": status = 1; break;
+                    case "Symbols:": status = 2; break;
+                    case "FinalStates:": status = 3; break;
+                    default:
+                    switch (status) {
+                        case 1: addStates(data.charAt(0) - '0'); break;
+                        case 2: addSymbol(data.charAt(0)); break;
+                        case 3: addFinalState(data.charAt(0) - '0'); break;
+                    }
+                }
+            }
+        } catch(FileNotFoundException ex) {
+            ex.printStackTrace();
+        } catch(NoSuchElementException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         DFA machine = new DFA(1);
-        machine.addStates(4);
-        machine.addSymbols(new char[] {
-            'a',
-            'b'
-        });
-        machine.addFinalState(4);
-        machine.addFunction(1, 'a', 2);
-        machine.addFunction(2, 'a', 2);
-        machine.addFunction(3, 'a', 4);
-        machine.addFunction(4, 'a', 4);
-        machine.addFunction(1, 'b', 1);
-        machine.addFunction(2, 'b', 3);
-        machine.addFunction(3, 'b', 1);
-        machine.addFunction(4, 'b', 4);
-        System.out.println(machine.automaton("aabbabaa"));
+        machine.readData("data.txt");
+        machine.readFunctions("funcs.txt");
+        System.out.println(machine.automaton("babaa"));
+        System.out.println(machine.automaton("aabbb"));
     }
 }

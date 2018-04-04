@@ -1,0 +1,3 @@
+States: 4
+Symbols: a b
+FinalStates: 4
