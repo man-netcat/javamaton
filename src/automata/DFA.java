@@ -9,7 +9,7 @@ public class DFA {
     // Input alphabet
     private Set <Character> alphabet = new HashSet<>();
     // Set of transition functions
-    private Map <Key, Character> functions = new HashMap<>();
+    private Map <Key, Character> transfuncs = new HashMap<>();
     // Start state
     private char start;
     // Set of final states
@@ -19,7 +19,7 @@ public class DFA {
         states.add(state);
     }
 
-    public void addStates(char amount) {
+    public void addStates(char[] states) {
         for (char state: states) {
             addState(state);
         }
@@ -47,12 +47,12 @@ public class DFA {
 
     public void addFunction(char state, char symbol, char newstate) {
         Key key = new Key(state, symbol);
-        functions.put(key, newstate);
+        transfuncs.put(key, newstate);
     }
 
     public char transition(char state, char symbol) {
         Key key = new Key(state, symbol);
-        return functions.get(key);
+        return transfuncs.get(key);
     }
 
     public void setStart(char start) {
@@ -96,7 +96,7 @@ public class DFA {
                     case "EndFunctions.": status = 0; break;
                     default:
                     switch (status) {
-                        case 1: addStates(data.charAt(0)); break;
+                        case 1: addState(data.charAt(0)); break;
                         case 2: addSymbol(data.charAt(0)); break;
                         case 3: this.start = data.charAt(0); break;
                         case 4: addFinalState(data.charAt(0)); break;
