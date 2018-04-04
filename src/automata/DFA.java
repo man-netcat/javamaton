@@ -12,7 +12,7 @@ public class DFA {
   // Start state
   private int start;
   // Set of final states
-  private Set<Integer> acceptedStates = new HashSet<>();
+  private Set<Integer> finalStates = new HashSet<>();
 
   public DFA(int start) {
     addStates(start);
@@ -27,11 +27,11 @@ public class DFA {
     }
   }
 
-  public void addAcceptedState(int state) { acceptedStates.add(state); }
+  public void addFinalState(int state) { finalStates.add(state); }
 
-  public void addAcceptedStates(int[] states) {
+  public void addFinalStates(int[] states) {
     for (int state : states) {
-      addAcceptedState(state);
+      addFinalState(state);
     }
   }
 
@@ -74,7 +74,7 @@ public class DFA {
       curstate = transition(curstate, symbol);
 	}
 	
-    if (acceptedStates.contains(curstate)) {
+    if (finalStates.contains(curstate)) {
       return true;
 	}
 	
@@ -85,7 +85,7 @@ public class DFA {
     DFA machine = new DFA(1);
     machine.addStates(4);
 	machine.addSymbols(new char[] {'a', 'b'});
-	machine.addAcceptedState(4);
+	machine.addFinalState(4);
     machine.addFunction(1, 'a', 2);
     machine.addFunction(2, 'a', 2);
     machine.addFunction(3, 'a', 4);
