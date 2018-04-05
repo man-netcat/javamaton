@@ -33,7 +33,6 @@ public class DFA {
                     case "Start:": status = 3; break;
                     case "FinalStates:": status = 4; break;
                     case "Functions:": status = 5; break;
-                    case "EndFunctions.": status = 0; break;
                     default:
                     switch (status) {
                         case 1: addState(data.charAt(0)); break;
