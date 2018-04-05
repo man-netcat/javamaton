@@ -19,7 +19,7 @@ public class Key {
         if (!(o instanceof Key))
             return false;
         Key key = (Key) o;
-        return state == key.state && symbol == key.symbol;
+        return state.equals(key.state) && symbol.equals(key.symbol);
     }
 
     @Override

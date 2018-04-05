@@ -21,38 +21,7 @@ public class DFA {
      * @param filename Name of the file containing the data.
      */
     public DFA (String filename) {
-        File file = new File(filename);
-        try {
-            Scanner scanner = new Scanner(file);
-            int status = 0;
-            while(scanner.hasNext()){
-                String data = scanner.next();
-                switch (data){
-                    case "States:": status = 1; break;
-                    case "Symbols:": status = 2; break;
-                    case "Start:": status = 3; break;
-                    case "FinalStates:": status = 4; break;
-                    case "Functions:": status = 5; break;
-                    default:
-                    switch (status) {
-                        case 1: addState(data); break;
-                        case 2: addSymbol(data.charAt(0)); break;
-                        case 3: setStart(data); break;
-                        case 4: addFinalState(data); break;
-                        case 5:
-                        String state = data;
-                        char symbol = scanner.next().charAt(0);
-                        String newstate = scanner.next();
-                        addFunction(state, symbol, newstate);
-                        break;
-                    }
-                }
-            }
-        } catch(FileNotFoundException ex) {
-            ex.printStackTrace();
-        } catch(NoSuchElementException ex) {
-            ex.printStackTrace();
-        }
+        readFile(filename);
     }
 
     /**
@@ -105,6 +74,40 @@ public class DFA {
      */
     public String transition(String state, char symbol) {
         return transfuncs.get(new Key(state, symbol));
+    }
+
+    public void readFile(String filename) {
+        File file = new File(filename);
+        try(Scanner scanner = new Scanner(file)) {
+            int status = 0;
+            while(scanner.hasNext()){
+                String data = scanner.next();
+                switch (data){
+                    case "States:": status = 1; break;
+                    case "Symbols:": status = 2; break;
+                    case "Start:": status = 3; break;
+                    case "FinalStates:": status = 4; break;
+                    case "Functions:": status = 5; break;
+                    default:
+                    switch (status) {
+                        case 1: addState(data); break;
+                        case 2: addSymbol(data.charAt(0)); break;
+                        case 3: setStart(data); break;
+                        case 4: addFinalState(data); break;
+                        case 5:
+                        String state = data;
+                        char symbol = scanner.next().charAt(0);
+                        String newstate = scanner.next();
+                        addFunction(state, symbol, newstate);
+                        break;
+                    }
+                }
+            }
+        } catch(FileNotFoundException ex) {
+            ex.printStackTrace();
+        } catch(NoSuchElementException ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**
