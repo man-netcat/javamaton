@@ -78,8 +78,7 @@ public class DFA {
      * @param newstate Succeeding state
      */
     public void addFunction(char state, char symbol, char newstate) {
-        Key key = new Key(state, symbol);
-        transfuncs.put(key, newstate);
+        transfuncs.put(new Key(state, symbol), newstate);
     }
 
     /**
@@ -105,8 +104,7 @@ public class DFA {
      * @return        Next state
      */
     public char transition(char state, char symbol) {
-        Key key = new Key(state, symbol);
-        return transfuncs.get(key);
+        return transfuncs.get(new Key(state, symbol));
     }
 
     /**
