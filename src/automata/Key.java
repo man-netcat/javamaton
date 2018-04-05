@@ -2,10 +2,10 @@ package automata;
 
 public class Key {
 
-    private final int state;
+    private final char state;
     private final char symbol;
 
-    public Key(int state, char symbol) {
+    public Key(char state, char symbol) {
         this.state = state;
         this.symbol = symbol;
     }
