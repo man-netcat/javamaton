@@ -5,18 +5,18 @@ import java.io.*;
 
 public class DFA {
     /* Finite set of states */
-    private Set <String> states = new HashSet<>();
+    private StateSet states = new StateSet();
     /* Input alphabet */
-    private Set <Character> alphabet = new HashSet<>();
+    private Alphabet aleph = new Alphabet();
     /* Set of transition functions */
-    public Map <Key, String> transfuncs = new HashMap<>();
+    private TransitionSet tf = new TransitionSet();
     /* Start state */
     private String start;
     /* Set of final states */
-    private Set <String> finalStates = new HashSet<>();
+    private StateSet finalStates = new StateSet();
 
     /**
-     * Constructor for the DFA. Reads data from a file and initialises the
+     * Constructor for the DFA. Reads data from aleph file and initialises the
      * class data with that data.
      * @param filename Name of the file containing the data.
      */
@@ -25,55 +25,11 @@ public class DFA {
     }
 
     /**
-     * Add a state to the set of states.
-     * @param state The state
-     */
-    public void addState(String state) {
-        states.add(state);
-    }
-
-    /**
-     * Add symbol to the alphabet.
-     * @param symbol The symbol
-     */
-    public void addSymbol(char symbol) {
-        alphabet.add(symbol);
-    }
-
-    /**
-     * Add transition function to the set of transition functions.
-     * @param state    Primary state
-     * @param symbol   Associated Symbol
-     * @param newstate Succeeding state
-     */
-    public void addFunction(String state, char symbol, String newstate) {
-        transfuncs.put(new Key(state, symbol), newstate);
-    }
-
-    /**
      * Sets the starting state.
      * @param start The starting states
      */
     public void setStart(String start) {
         this.start = start;
-    }
-
-    /**
-     * Add final state to the set of final states.
-     * @param state The final state
-     */
-    public void addFinalState(String state) {
-        finalStates.add(state);
-    }
-
-    /**
-     * Return state associated with the given transition function.
-     * @param  state  Current state
-     * @param  symbol Associated symbol
-     * @return        Next state
-     */
-    public String transition(String state, char symbol) {
-        return transfuncs.get(new Key(state, symbol));
     }
 
     public void readFile(String filename) {
@@ -90,15 +46,15 @@ public class DFA {
                     case "Functions:": status = 5; break;
                     default:
                     switch (status) {
-                        case 1: addState(data); break;
-                        case 2: addSymbol(data.charAt(0)); break;
+                        case 1: states.addState(data); break;
+                        case 2: aleph.addSymbol(data.charAt(0)); break;
                         case 3: setStart(data); break;
-                        case 4: addFinalState(data); break;
+                        case 4: finalStates.addState(data); break;
                         case 5:
                         String state = data;
                         char symbol = scanner.next().charAt(0);
                         String newstate = scanner.next();
-                        addFunction(state, symbol, newstate);
+                        tf.addFunction(state, symbol, newstate);
                         break;
                     }
                 }
@@ -110,20 +66,12 @@ public class DFA {
         }
     }
 
-    /**
-     * Execute automaton with a given word. A word must exclusively contain
-     * symbols from the current alphabet.
-     * @param  word A word containing symbols present in the current alphabet
-     * @return      True if accepted, false if rejected.
-     */
     public boolean automaton(String word) {
         String curstate = start;
 
         for (int i = 0; i < word.length(); i++) {
             char symbol = word.charAt(i);
-            System.out.println("before: " + curstate);
-            curstate = transition(curstate, symbol);
-            System.out.println("after: "+ curstate);
+            curstate = tf.transition(curstate, symbol);
         }
 
         if (finalStates.contains(curstate)) {
@@ -135,12 +83,11 @@ public class DFA {
 
     public static void main(String[] args) {
         DFA m1 = new DFA("data.txt");
-        System.out.println(m1.transfuncs);
         System.out.println(m1.automaton("babaa"));
-        // System.out.println(m1.automaton("aabbb"));
-        //
-        // DFA m2 = new DFA("data2.txt");
-        // System.out.println(m2.automaton("1001010"));
-        // System.out.println(m2.automaton("100101"));
+        System.out.println(m1.automaton("aabbb"));
+
+        DFA m2 = new DFA("data2.txt");
+        System.out.println(m2.automaton("1001010"));
+        System.out.println(m2.automaton("100101"));
     }
 }
