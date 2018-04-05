@@ -5,15 +5,15 @@ import java.io.*;
 
 public class DFA {
     /* Finite set of states */
-    private Set <Character> states = new HashSet<>();
+    private Set <String> states = new HashSet<>();
     /* Input alphabet */
     private Set <Character> alphabet = new HashSet<>();
     /* Set of transition functions */
-    private Map <Key, Character> transfuncs = new HashMap<>();
+    public Map <Key, String> transfuncs = new HashMap<>();
     /* Start state */
-    private char start;
+    private String start;
     /* Set of final states */
-    private Set <Character> finalStates = new HashSet<>();
+    private Set <String> finalStates = new HashSet<>();
 
     /**
      * Constructor for the DFA. Reads data from a file and initialises the
@@ -21,45 +21,14 @@ public class DFA {
      * @param filename Name of the file containing the data.
      */
     public DFA (String filename) {
-        File file = new File(filename);
-        try {
-            Scanner scanner = new Scanner(file);
-            char status = 0;
-            while(scanner.hasNext()){
-                String data = scanner.next();
-                switch (data){
-                    case "States:": status = 1; break;
-                    case "Symbols:": status = 2; break;
-                    case "Start:": status = 3; break;
-                    case "FinalStates:": status = 4; break;
-                    case "Functions:": status = 5; break;
-                    default:
-                    switch (status) {
-                        case 1: addState(data.charAt(0)); break;
-                        case 2: addSymbol(data.charAt(0)); break;
-                        case 3: this.start = data.charAt(0); break;
-                        case 4: addFinalState(data.charAt(0)); break;
-                        case 5:
-                        char state = data.charAt(0);
-                        char symbol = scanner.next().charAt(0);
-                        char newstate = scanner.next().charAt(0);
-                        addFunction(state, symbol, newstate);
-                        break;
-                    }
-                }
-            }
-        } catch(FileNotFoundException ex) {
-            ex.printStackTrace();
-        } catch(NoSuchElementException ex) {
-            ex.printStackTrace();
-        }
+        readFile(filename);
     }
 
     /**
      * Add a state to the set of states.
      * @param state The state
      */
-    public void addState(char state) {
+    public void addState(String state) {
         states.add(state);
     }
 
@@ -77,7 +46,7 @@ public class DFA {
      * @param symbol   Associated Symbol
      * @param newstate Succeeding state
      */
-    public void addFunction(char state, char symbol, char newstate) {
+    public void addFunction(String state, char symbol, String newstate) {
         transfuncs.put(new Key(state, symbol), newstate);
     }
 
@@ -85,7 +54,7 @@ public class DFA {
      * Sets the starting state.
      * @param start The starting states
      */
-    public void setStart(char start) {
+    public void setStart(String start) {
         this.start = start;
     }
 
@@ -93,7 +62,7 @@ public class DFA {
      * Add final state to the set of final states.
      * @param state The final state
      */
-    public void addFinalState(char state) {
+    public void addFinalState(String state) {
         finalStates.add(state);
     }
 
@@ -103,8 +72,42 @@ public class DFA {
      * @param  symbol Associated symbol
      * @return        Next state
      */
-    public char transition(char state, char symbol) {
+    public String transition(String state, char symbol) {
         return transfuncs.get(new Key(state, symbol));
+    }
+
+    public void readFile(String filename) {
+        File file = new File(filename);
+        try(Scanner scanner = new Scanner(file)) {
+            int status = 0;
+            while(scanner.hasNext()){
+                String data = scanner.next();
+                switch (data){
+                    case "States:": status = 1; break;
+                    case "Symbols:": status = 2; break;
+                    case "Start:": status = 3; break;
+                    case "FinalStates:": status = 4; break;
+                    case "Functions:": status = 5; break;
+                    default:
+                    switch (status) {
+                        case 1: addState(data); break;
+                        case 2: addSymbol(data.charAt(0)); break;
+                        case 3: setStart(data); break;
+                        case 4: addFinalState(data); break;
+                        case 5:
+                        String state = data;
+                        char symbol = scanner.next().charAt(0);
+                        String newstate = scanner.next();
+                        addFunction(state, symbol, newstate);
+                        break;
+                    }
+                }
+            }
+        } catch(FileNotFoundException ex) {
+            ex.printStackTrace();
+        } catch(NoSuchElementException ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**
@@ -114,11 +117,13 @@ public class DFA {
      * @return      True if accepted, false if rejected.
      */
     public boolean automaton(String word) {
-        char curstate = start;
+        String curstate = start;
 
         for (int i = 0; i < word.length(); i++) {
             char symbol = word.charAt(i);
+            System.out.println("before: " + curstate);
             curstate = transition(curstate, symbol);
+            System.out.println("after: "+ curstate);
         }
 
         if (finalStates.contains(curstate)) {
@@ -130,11 +135,12 @@ public class DFA {
 
     public static void main(String[] args) {
         DFA m1 = new DFA("data.txt");
+        System.out.println(m1.transfuncs);
         System.out.println(m1.automaton("babaa"));
-        System.out.println(m1.automaton("aabbb"));
-
-        DFA m2 = new DFA("data2.txt");
-        System.out.println(m2.automaton("1001010"));
-        System.out.println(m2.automaton("100101"));
+        // System.out.println(m1.automaton("aabbb"));
+        //
+        // DFA m2 = new DFA("data2.txt");
+        // System.out.println(m2.automaton("1001010"));
+        // System.out.println(m2.automaton("100101"));
     }
 }

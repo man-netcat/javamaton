@@ -1,11 +1,13 @@
 package automata;
 
+import java.util.Objects;
+
 public class Key {
 
-    private final char state;
-    private final char symbol;
+    private final String state;
+    private final Character symbol;
 
-    public Key(char state, char symbol) {
+    public Key(String state, Character symbol) {
         this.state = state;
         this.symbol = symbol;
     }
@@ -17,13 +19,11 @@ public class Key {
         if (!(o instanceof Key))
             return false;
         Key key = (Key) o;
-        return state == key.state && symbol == key.symbol;
+        return state.equals(key.state) && symbol.equals(key.symbol);
     }
 
     @Override
     public int hashCode() {
-        int result = state;
-        result = 17 * result + symbol;
-        return result;
+        return Objects.hash(state, symbol);
     }
 }
