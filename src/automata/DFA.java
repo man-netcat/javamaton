@@ -15,6 +15,47 @@ public class DFA {
     // Set of final states
     private Set <Character> finalStates = new HashSet<>();
 
+    /**
+     * Constructor for the DFA. Reads data from a file and initialises the
+     * class data with that data.
+     * @param filename Name of the file containing the data.
+     */
+    public DFA (String filename) {
+        File file = new File(filename);
+        try {
+            Scanner scanner = new Scanner(file);
+            char status = 0;
+            while(scanner.hasNext()){
+                String data = scanner.next();
+                switch (data){
+                    case "States:": status = 1; break;
+                    case "Symbols:": status = 2; break;
+                    case "Start:": status = 3; break;
+                    case "FinalStates:": status = 4; break;
+                    case "Functions:": status = 5; break;
+                    case "EndFunctions.": status = 0; break;
+                    default:
+                    switch (status) {
+                        case 1: addState(data.charAt(0)); break;
+                        case 2: addSymbol(data.charAt(0)); break;
+                        case 3: this.start = data.charAt(0); break;
+                        case 4: addFinalState(data.charAt(0)); break;
+                        case 5:
+                        char state = data.charAt(0);
+                        char symbol = scanner.next().charAt(0);
+                        char newstate = scanner.next().charAt(0);
+                        addFunction(state, symbol, newstate);
+                        break;
+                    }
+                }
+            }
+        } catch(FileNotFoundException ex) {
+            ex.printStackTrace();
+        } catch(NoSuchElementException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public void addState(char state) {
         states.add(state);
     }
@@ -60,51 +101,12 @@ public class DFA {
         return false;
     }
 
-    public void readData(String filename)
-    {
-        File file = new File(filename);
-        try {
-            Scanner scanner = new Scanner(file);
-            char status = 0;
-            while(scanner.hasNext()){
-                String data = scanner.next();
-                switch (data){
-                    case "States:": status = 1; break;
-                    case "Symbols:": status = 2; break;
-                    case "Start:": status = 3; break;
-                    case "FinalStates:": status = 4; break;
-                    case "Functions:": status = 5; break;
-                    case "EndFunctions.": status = 0; break;
-                    default:
-                    switch (status) {
-                        case 1: addState(data.charAt(0)); break;
-                        case 2: addSymbol(data.charAt(0)); break;
-                        case 3: this.start = data.charAt(0); break;
-                        case 4: addFinalState(data.charAt(0)); break;
-                        case 5:
-                        char state = data.charAt(0);
-                        char symbol = scanner.next().charAt(0);
-                        char newstate = scanner.next().charAt(0);
-                        addFunction(state, symbol, newstate);
-                        break;
-                    }
-                }
-            }
-        } catch(FileNotFoundException ex) {
-            ex.printStackTrace();
-        } catch(NoSuchElementException ex) {
-            ex.printStackTrace();
-        }
-    }
-
     public static void main(String[] args) {
-        DFA m1 = new DFA();
-        m1.readData("data.txt");
+        DFA m1 = new DFA("data.txt");
         System.out.println(m1.automaton("babaa"));
         System.out.println(m1.automaton("aabbb"));
 
-        DFA m2 = new DFA();
-        m2.readData("data2.txt");
+        DFA m2 = new DFA("data2.txt");
         System.out.println(m2.automaton("1001010"));
         System.out.println(m2.automaton("100101"));
     }
