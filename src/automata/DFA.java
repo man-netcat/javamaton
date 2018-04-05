@@ -4,15 +4,15 @@ import java.util.*;
 import java.io.*;
 
 public class DFA {
-    // Finite set of states
+    /* Finite set of states */
     private Set <Character> states = new HashSet<>();
-    // Input alphabet
+    /* Input alphabet */
     private Set <Character> alphabet = new HashSet<>();
-    // Set of transition functions
+    /* Set of transition functions */
     private Map <Key, Character> transfuncs = new HashMap<>();
-    // Start state
+    /* Start state */
     private char start;
-    // Set of final states
+    /* Set of final states */
     private Set <Character> finalStates = new HashSet<>();
 
     /**
@@ -56,36 +56,66 @@ public class DFA {
         }
     }
 
+    /**
+     * Add a state to the set of states.
+     * @param state The state
+     */
     public void addState(char state) {
         states.add(state);
     }
 
-    public void addFinalState(char state) {
-        finalStates.add(state);
-    }
-
+    /**
+     * Add symbol to the alphabet.
+     * @param symbol The symbol
+     */
     public void addSymbol(char symbol) {
         alphabet.add(symbol);
     }
 
+    /**
+     * Add transition function to the set of transition functions.
+     * @param state    Primary state
+     * @param symbol   Associated Symbol
+     * @param newstate Succeeding state
+     */
     public void addFunction(char state, char symbol, char newstate) {
         Key key = new Key(state, symbol);
         transfuncs.put(key, newstate);
     }
 
+    /**
+     * Sets the starting state.
+     * @param start The starting states
+     */
+    public void setStart(char start) {
+        this.start = start;
+    }
+
+    /**
+     * Add final state to the set of final states.
+     * @param state The final state
+     */
+    public void addFinalState(char state) {
+        finalStates.add(state);
+    }
+
+    /**
+     * Return state associated with the given transition function.
+     * @param  state  Current state
+     * @param  symbol Associated symbol
+     * @return        Next state
+     */
     public char transition(char state, char symbol) {
         Key key = new Key(state, symbol);
         return transfuncs.get(key);
     }
 
-    public void setStart(char start) {
-        this.start = start;
-    }
-
-    public char getStart() {
-        return start;
-    }
-
+    /**
+     * Execute automaton with a given word. A word must exclusively contain
+     * symbols from the current alphabet.
+     * @param  word A word containing symbols present in the current alphabet
+     * @return      True if accepted, false if rejected.
+     */
     public boolean automaton(String word) {
         char curstate = start;
 
