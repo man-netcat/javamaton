@@ -1,4 +1,4 @@
-package automata;
+package src.main.java.automata;
 
 import java.util.*;
 import java.io.*;

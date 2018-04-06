@@ -1,5 +1,4 @@
-package automata;
-
+package src.main.java.automata;
 import java.util.*;
 
 public class StateSet {
@@ -28,10 +27,11 @@ public class StateSet {
     }
 
     public String toString() {
-        String result = "";
+        String result = "(";
         for (String state : set) {
             result += state + ", ";
         }
+        result += ")";
         return result;
     }
 }

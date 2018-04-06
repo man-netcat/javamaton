@@ -1,13 +1,13 @@
-package automata;
+package src.main.java.automata;
 
 import java.util.Objects;
 
-public class Key {
+public class TransFunc {
 
     private final String state;
     private final Character symbol;
 
-    public Key(String state, Character symbol) {
+    public TransFunc(String state, Character symbol) {
         this.state = state;
         this.symbol = symbol;
     }
@@ -24,9 +24,9 @@ public class Key {
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (!(o instanceof Key))
+        if (!(o instanceof TransFunc))
             return false;
-        Key key = (Key) o;
+        TransFunc key = (TransFunc) o;
         return state.equals(key.state) && symbol.equals(key.symbol);
     }
 

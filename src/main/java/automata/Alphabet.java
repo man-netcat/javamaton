@@ -1,4 +1,4 @@
-package automata;
+package src.main.java.automata;
 import java.util.*;
 
 class Alphabet {
@@ -14,5 +14,14 @@ class Alphabet {
 
     public boolean equals(Alphabet a2) {
         return set.equals(a2.set);
+    }
+
+    public String toString() {
+        String result = "(";
+        for (char symbol : set) {
+            result += symbol + ", ";
+        }
+        result += ")";
+        return result;
     }
 }

@@ -1,8 +1,8 @@
-package automata;
+package src.main.java.automata;
 import java.util.*;
 
 class TransitionSet {
-    private Map<Key, String> set = new HashMap<>();
+    private Map<TransFunc, String> set = new HashMap<>();
 
     /**
      * Add transition function to the set of transition functions.
@@ -11,7 +11,7 @@ class TransitionSet {
      * @param newstate Succeeding state
      */
     public void addFunction(String state, char symbol, String newstate) {
-        set.put(new Key(state, symbol), newstate);
+        set.put(new TransFunc(state, symbol), newstate);
     }
 
     /**
@@ -21,13 +21,13 @@ class TransitionSet {
      * @return        Next state
      */
     public String transition(String state, char symbol) {
-        return set.get(new Key(state, symbol));
+        return set.get(new TransFunc(state, symbol));
     }
 
     public TransitionSet product(Alphabet alphabet, TransitionSet t2) {
         TransitionSet product = new TransitionSet();
-        for (Key key1 : set.keySet()) {
-            for (Key key2 : t2.set.keySet()) {
+        for (TransFunc key1 : set.keySet()) {
+            for (TransFunc key2 : t2.set.keySet()) {
                 for (char symbol : alphabet.getSet()) {
                     String state1 = key1.getState();
                     String state2 = key2.getState();
@@ -40,5 +40,18 @@ class TransitionSet {
             }
         }
         return product;
+    }
+
+    public String toString() {
+        String result = "(";
+        for (TransFunc func : set.keySet()) {
+            result += func + ", ";
+        }
+        result += ")\n(";
+        for (String state : set.values()) {
+            result += state + ", ";
+        }
+        result += ")";
+        return result;
     }
 }
