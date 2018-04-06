@@ -1,6 +1,6 @@
-package src.main.java.automata;
+package automata;
 import java.util.*;
-
+ 
 public class StateSet {
     private Set<String> set = new HashSet<>();
 
@@ -10,7 +10,7 @@ public class StateSet {
             for (String state2 : s2.set) {
                 product.addState(state1 + state2);
             }
-        }
+        }        
         return product;
     }
 
