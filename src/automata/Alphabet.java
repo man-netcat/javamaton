@@ -2,13 +2,17 @@ package automata;
 import java.util.*;
 
 class Alphabet {
-    private Set<Character> alphabet = new HashSet<>();
+    private Set<Character> set = new HashSet<>();
 
-    /**
-     * Add symbol to the alphabet.
-     * @param symbol The symbol
-     */
+    public Set<Character> getSet() {
+        return set;
+    }
+
     public void addSymbol(char symbol) {
-        alphabet.add(symbol);
+        set.add(symbol);
+    }
+
+    public boolean equals(Alphabet a2) {
+        return set.equals(a2.set);
     }
 }

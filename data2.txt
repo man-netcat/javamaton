@@ -1,11 +1,9 @@
-States: a b c
-Symbols: 0 1
-Start: a
-FinalStates: c
+States: 1 2
+Symbols: a b
+Start: 1
+FinalStates: 1 2
 Functions:
-a 0 a
-a 1 b
-b 0 c
-b 1 a
-c 0 b
-c 1 c
+1 a 1
+1 b 2
+2 a 2
+2 b 1

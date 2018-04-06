@@ -12,6 +12,14 @@ public class Key {
         this.symbol = symbol;
     }
 
+    public String getState() {
+        return state;
+    }
+
+    public Character getSymbol() {
+        return symbol;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -25,5 +33,10 @@ public class Key {
     @Override
     public int hashCode() {
         return Objects.hash(state, symbol);
+    }
+
+    @Override
+    public String toString() {
+        return "(" + state + ", " + symbol + ")";
     }
 }

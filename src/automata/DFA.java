@@ -20,8 +20,26 @@ public class DFA {
      * class data with that data.
      * @param filename Name of the file containing the data.
      */
+
+     public DFA() {
+
+     }
+
     public DFA (String filename) {
         readFile(filename);
+    }
+
+    public DFA intersection(DFA d2) {
+        if (!aleph.equals(d2.aleph)) {
+            return null;
+        }
+        DFA intersection = new DFA();
+        intersection.states = states.product(d2.states);
+        intersection.aleph = aleph;
+        intersection.start = start + d2.start;
+        intersection.tf = tf.product(aleph, d2.tf);
+        intersection.finalStates = finalStates.product(d2.finalStates);
+        return intersection;
     }
 
     /**
@@ -82,12 +100,22 @@ public class DFA {
     }
 
     public static void main(String[] args) {
-        DFA m1 = new DFA("data.txt");
-        System.out.println(m1.automaton("babaa"));
-        System.out.println(m1.automaton("aabbb"));
+        StateSet set1 = new StateSet();
+        set1.addState("1");
+        set1.addState("2");
 
+        StateSet set2 = new StateSet();
+        set2.addState("1");
+        set2.addState("2");
+
+        StateSet product = set1.product(set2);
+        System.out.println(product);
+
+        DFA m1 = new DFA("data.txt");
         DFA m2 = new DFA("data2.txt");
-        System.out.println(m2.automaton("1001010"));
-        System.out.println(m2.automaton("100101"));
+        DFA mi = m1.intersection(m2);
+        System.out.println(m1.automaton("babaa"));
+        System.out.println(m2.automaton("babaa"));
+        System.out.println(mi.automaton("babaa"));
     }
 }

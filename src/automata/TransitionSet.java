@@ -23,4 +23,22 @@ class TransitionSet {
     public String transition(String state, char symbol) {
         return set.get(new Key(state, symbol));
     }
+
+    public TransitionSet product(Alphabet alphabet, TransitionSet t2) {
+        TransitionSet product = new TransitionSet();
+        for (Key key1 : set.keySet()) {
+            for (Key key2 : t2.set.keySet()) {
+                for (char symbol : alphabet.getSet()) {
+                    String state1 = key1.getState();
+                    String state2 = key2.getState();
+                    String newstate1 = transition(state1, symbol);
+                    String newstate2 = transition(state2, symbol);
+                    String res = state1+state2;
+                    String newres = newstate1+newstate2;
+                    product.addFunction(res, symbol, newres);
+                }
+            }
+        }
+        return product;
+    }
 }
