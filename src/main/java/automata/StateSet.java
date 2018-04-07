@@ -14,10 +14,6 @@ public class StateSet {
         return product;
     }
 
-    /**
-     * Add a state to the set of states.
-     * @param state The state
-     */
     public void addState(String state) {
         set.add(state);
     }
@@ -27,11 +23,11 @@ public class StateSet {
     }
 
     public String toString() {
-        String result = "(";
+        String result = "{";
         for (String state : set) {
             result += state + ", ";
         }
-        result += ")";
+        result += "}";
         return result;
     }
 }

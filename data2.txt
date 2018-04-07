@@ -1,9 +1,9 @@
-States: 1 2
-Symbols: a b
-Start: 1
-FinalStates: 1 2
-Functions:
+Q: 1 2
+Sigma: a b
+delta:
 1 a 1
 1 b 2
 2 a 2
 2 b 1
+s: 1
+F: 2
