@@ -34,8 +34,35 @@ public class DFA {
         return ins;
     }
 
+    public DFA complement() {
+        DFA comp = new DFA();
+        comp.states = states;
+        comp.alpha = alpha;
+        comp.start = start + start;
+        comp.transitions = transitions;
+        comp.finalStates = states.difference(finalStates);
+        return comp;
+    }
+
+    public DFA union(DFA d2) {
+        if (!alpha.equals(d2.alpha)) {
+            return null;
+        }
+        DFA cd1 = this.complement();
+        DFA cd2 = d2.complement();
+        DFA union = (cd1.intersection(cd2)).complement();
+        return union;
+    }
+
     public void setStart(String start) {
         this.start = start;
+    }
+
+    public void readFunction(String data, Scanner scanner) {
+        String state = data;
+        char symbol = scanner.next().charAt(0);
+        String newstate = scanner.next();
+        transitions.addFunction(state, symbol, newstate);
     }
 
     public void readFile(String filename) {
@@ -54,12 +81,7 @@ public class DFA {
                     switch (status) {
                         case 1: states.addState(data); break;
                         case 2: alpha.addSymbol(data.charAt(0)); break;
-                        case 3:
-                        String state = data;
-                        char symbol = scanner.next().charAt(0);
-                        String newstate = scanner.next();
-                        transitions.addFunction(state, symbol, newstate);
-                        break;
+                        case 3: readFunction(data, scanner); break;
                         case 4: setStart(data); break;
                         case 5: finalStates.addState(data); break;
                     }
@@ -90,13 +112,21 @@ public class DFA {
         DFA m1 = new DFA("data.txt");
         DFA m2 = new DFA("data2.txt");
         DFA mi = m1.intersection(m2);
+        DFA mu = m1.union(m2);
+        DFA m1c = m1.complement();
         String word1 = "aab";
         String word2 = "abb";
+
         System.out.println(m1.automaton(word1));
+        System.out.println(m1c.automaton(word1));
         System.out.println(m2.automaton(word1));
         System.out.println(mi.automaton(word1));
+        System.out.println(mu.automaton(word1));
+        System.out.println("\n");
         System.out.println(m1.automaton(word2));
+        System.out.println(m1c.automaton(word2));
         System.out.println(m2.automaton(word2));
         System.out.println(mi.automaton(word2));
+        System.out.println(mu.automaton(word2));
     }
 }

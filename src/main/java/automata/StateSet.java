@@ -22,6 +22,13 @@ public class StateSet {
         return set.contains(state);
     }
 
+    public StateSet difference(StateSet s2) {
+        StateSet diff = new StateSet();
+        diff.set = set;
+        diff.set.removeAll(s2.set);
+        return diff;
+    }
+
     public String toString() {
         String result = "{";
         for (String state : set) {
